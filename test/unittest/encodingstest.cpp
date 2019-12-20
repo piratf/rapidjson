@@ -328,6 +328,11 @@ TEST(EncodingsTest, UTF8) {
                 EXPECT_TRUE(result);
                 EXPECT_EQ(0, StrCmp(encodedStr, os2.GetString()));
             }
+
+            EXPECT_TRUE(ValidatableEncoder<>::Encode<UTF8<> >(os, codepoint));
+            EXPECT_TRUE(ValidatableEncoder<>::EncodeUnsafe<UTF8<> >(os, codepoint));
+            EXPECT_TRUE(ValidatableEncoder<false>::Encode<UTF8<> >(os, codepoint));
+            EXPECT_TRUE(ValidatableEncoder<false>::EncodeUnsafe<UTF8<> >(os, codepoint));
         }
     }
 
@@ -394,21 +399,26 @@ TEST(EncodingsTest, UTF16) {
                 EXPECT_TRUE(result);
                 EXPECT_EQ(0, StrCmp(encodedStr, os2.GetString()));
             }
+
+            EXPECT_TRUE(ValidatableEncoder<>::Encode<UTF16<> >(os, codepoint));
+            EXPECT_TRUE(ValidatableEncoder<>::EncodeUnsafe<UTF16<> >(os, codepoint));
+            EXPECT_TRUE(ValidatableEncoder<false>::Encode<UTF16<> >(os, codepoint));
+            EXPECT_TRUE(ValidatableEncoder<false>::EncodeUnsafe<UTF16<> >(os, codepoint));
         }
     }
 
     // Validate code point before encoding
     EXPECT_FALSE(ValidatableEncoder<>::Encode<UTF16<> >(os, 0xFFFFFFFF));
-    EXPECT_FALSE(ValidatableEncoder<>::EncodeUnsafe<UTF16<> >(os, 0xFFFFFFFF));
     EXPECT_FALSE(ValidatableEncoder<>::Encode<UTF16<> >(os, 0xD800));
-    EXPECT_FALSE(ValidatableEncoder<>::EncodeUnsafe<UTF16<> >(os, 0xD800));
     EXPECT_FALSE(ValidatableEncoder<>::Encode<UTF16<> >(os, 0xDFFF));
+    EXPECT_FALSE(ValidatableEncoder<>::EncodeUnsafe<UTF16<> >(os, 0xFFFFFFFF));
+    EXPECT_FALSE(ValidatableEncoder<>::EncodeUnsafe<UTF16<> >(os, 0xD800));
     EXPECT_FALSE(ValidatableEncoder<>::EncodeUnsafe<UTF16<> >(os, 0xDFFF));
     EXPECT_THROW(ValidatableEncoder<false>::Encode<UTF16<> >(os, 0xFFFFFFFF), AssertException);
-    EXPECT_THROW(ValidatableEncoder<false>::EncodeUnsafe<UTF16<> >(os, 0xFFFFFFFF), AssertException);
     EXPECT_THROW(ValidatableEncoder<false>::Encode<UTF16<> >(os, 0xD800), AssertException);
-    EXPECT_THROW(ValidatableEncoder<false>::EncodeUnsafe<UTF16<> >(os, 0xD800), AssertException);
     EXPECT_THROW(ValidatableEncoder<false>::Encode<UTF16<> >(os, 0xDFFF), AssertException);
+    EXPECT_THROW(ValidatableEncoder<false>::EncodeUnsafe<UTF16<> >(os, 0xFFFFFFFF), AssertException);
+    EXPECT_THROW(ValidatableEncoder<false>::EncodeUnsafe<UTF16<> >(os, 0xD800), AssertException);
     EXPECT_THROW(ValidatableEncoder<false>::EncodeUnsafe<UTF16<> >(os, 0xDFFF), AssertException);
 }
 
@@ -439,6 +449,11 @@ TEST(EncodingsTest, UTF32) {
                 EXPECT_TRUE(result);
                 EXPECT_EQ(0, StrCmp(encodedStr, os2.GetString()));
             }
+
+            EXPECT_TRUE(ValidatableEncoder<>::Encode<UTF32<> >(os, codepoint));
+            EXPECT_TRUE(ValidatableEncoder<>::EncodeUnsafe<UTF32<> >(os, codepoint));
+            EXPECT_TRUE(ValidatableEncoder<false>::Encode<UTF32<> >(os, codepoint));
+            EXPECT_TRUE(ValidatableEncoder<false>::EncodeUnsafe<UTF32<> >(os, codepoint));
         }
     }
 
@@ -450,7 +465,7 @@ TEST(EncodingsTest, UTF32) {
 }
 
 TEST(EncodingsTest, ASCII) {
-    StringBuffer os, os2;
+    StringBuffer os, os2, os3;
     for (unsigned codepoint = 0; codepoint < 128; codepoint++) {
         os.Clear();
         ASCII<>::Encode(os, codepoint);
@@ -471,6 +486,11 @@ TEST(EncodingsTest, ASCII) {
             EXPECT_TRUE(result);
             EXPECT_EQ(0, StrCmp(encodedStr, os2.GetString()));
         }
+
+        EXPECT_TRUE(ValidatableEncoder<>::Encode<ASCII<> >(os3, codepoint));
+        EXPECT_TRUE(ValidatableEncoder<>::EncodeUnsafe<ASCII<> >(os3, codepoint));
+        EXPECT_TRUE(ValidatableEncoder<false>::Encode<ASCII<> >(os3, codepoint));
+        EXPECT_TRUE(ValidatableEncoder<false>::EncodeUnsafe<ASCII<> >(os3, codepoint));
     }
 
     // Validate code point before encoding
